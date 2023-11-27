@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Goal Attainment Scale (GAS) Calculator</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f7f6;
+    margin: 0;
+    padding: 20px;
+  }
+  .container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+  h1, h2 {
+    color: #4e616c;
+  }
+  label {
+    display: block;
+    margin-top: 20px;
+    color: #4e616c;
+  }
+  input[type="text"], input[type="number"], select, button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+  button {
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin-top: 20px;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #4cae4c;
+  }
+  #result1, #result2 {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #e2e2e2;
+    border-radius: 4px;
+  }
+</style>
+<script>
+function calculateWeight() {
+  var importance = parseInt(document.getElementById('importance1').value);
+  var difficulty = parseInt(document.getElementById('difficulty1').value);
+  var weight = importance * difficulty;
+  document.getElementById('weight1').value = weight;
+  document.getElementById('weight2').value = weight; // Use the same weight for Goal 2
+}
+
+function calculateGAS(section) {
+  var w = parseInt(document.getElementById('weight' + section).value);
+  var x = parseInt(document.getElementById('score' + section).value);
+  var numerator = 10 * (w * x);
+  var denominator = Math.sqrt((0.7 * w * w) + (0.3 * w * w));
+  var overallGAS = 50 + (numerator / denominator);
+
+  document.getElementById('result' + section).innerText = 'Overall GAS Score: ' + overallGAS.toFixed(2);
+}
+
+window.onload = function() {
+  document.getElementById('importance1').onchange = calculateWeight;
+  document.getElementById('difficulty1').onchange = calculateWeight;
+};
+</script>
+</head>
+<body>
+<div class="container">
+  <h1>Goal Attainment Scale (GAS) Calculator</h1>
+
+  <h2>Goal 1: Baseline</h2>
+    <div>
+      <label for="goal-domain1">What is the goal domain?</label>
+      <select id="goal-domain1" name="goal-domain1" required>
+      <option value="Social Connection">Social Connection</option>
+      <option value="Skills for Independent Living">Skills for Independent Living</option>
+      <option value="Physical Health">Physical Health</option>
+      <option value="Other">Other</option>
+    </select>
+  </div>
+
+<div>
+  <label for="achieve">What could we do to achieve this?</label>
+  <input type="text" id="achieve" name="achieve" required value="Enter your SMART plan here...">
+</div>
+
+<div>
+  <label for="Maintenance or improvement focussed?">Maintenance or improvement:</label>
+  <select id="Maintenance or improvement" name="Maintenance or improvement" required>
+    <option value="Maintenance">Maintenance</option>
+    <option value="Improvement">Improvement</option>
+  </select>
+
+  <label for="importance1">Importance (0-3):</label>
+  <select id="importance1" name="importance1" required>
+    <option value="0">Not Important</option>
+    <option value="1">Important</option>
+    <option value="2">Very Important</option>
+    <option value="3">Extremely Important</option>
+  </select>
+
+  <label for="difficulty1">Difficulty (0-3):</label>
+  <select id="difficulty1" name="difficulty1" required>
+    <option value="0">Not Difficult</option>
+    <option value="1">Probable</option>
+    <option value="2">Possible</option>
+    <option value="3">Challenging</option>
+  </select>
+</div>
+
+<div>
+  <label for="weight1">Weight (w):</label>
+  <input type="text" id="weight1" name="weight1" readonly>
+</div>
+
+<div>
+  <label for="score1">Baseline Score (x):</label>
+  <select id="score1" name="score1" required>
+    <option value="-1">-Some function</option>
+    <option value="-2">-No function</option>
+  </select>
+</div>
+
+<button onclick="calculateGAS('1')">Calculate Overall GAS Score</button>
+<div id="result1"></div>
+
+<hr> <!-- Section break -->
+
+<div class="container">
+  <h2>Goal 1: Achievement</h2>
+
+<div>
+  <label for="weight2">Weight (w):</label>
+  <input type="text" id="weight2" name="weight2" readonly>
+</div>
+
+<div>
+  <label for="score2">Achievement Score (x):</label>
+  <select id="score2" name="score2" required>
+    <option value="-2">-Worsened</option>
+    <option value="-1">-No change</option>
+    <option value="0">As expected</option>
+    <option value="1">A little more than expected</option>
+    <option value="2">A lot more than expected</option>
+  </select>
+</div>
+
+<button onclick="calculateGAS('2')">Calculate Overall GAS Score</button>
+<div id="result2"></div>
+
+</body>
+</html
