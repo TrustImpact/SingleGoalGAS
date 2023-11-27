@@ -26,6 +26,11 @@
     margin-top: 20px;
     color: #4e616c;
   }
+  textarea {
+  width: 100%;
+  max-width: 1800px; /* Set this to your desired maximum width */
+  }
+  }
   input[type="text"], input[type="number"], select, button {
     width: 100%;
     padding: 10px;
@@ -94,8 +99,40 @@ window.onload = function() {
 
 <div>
   <label for="achieve">What could we do to achieve this?</label>
-  <input type="text" id="achieve" name="achieve" required value="What is your specific ">
+  <textarea id="achieve" name="achieve" required rows="30">
+
+Specific
+What do you want to accomplish?
+Why is this goal important?
+Who is involved?
+Where will it take place?
+What resources or limits are involved?
+
+Measurable
+How much?
+How many?
+How will you know when it is accomplished?
+
+Achievable
+How can the goal be accomplished?
+What are the logical steps to take?
+Is it realistically achievable given your current resources and constraints?
+
+Relevant
+Does this seem worthwhile?
+Is this the right time?
+Does this match your other efforts/needs?
+Are you the right person to reach this goal?
+Is it applicable in the current environment?
+
+Time-bound
+When do you want to accomplish this goal?
+What can you do today?
+What can you do six weeks from now?
+What can you do six months from now?
+</textarea>
 </div>
+
 
 <div>
   <label for="Maintenance or improvement focussed?">Maintenance or improvement:</label>
