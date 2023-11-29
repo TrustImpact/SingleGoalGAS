@@ -27,9 +27,8 @@
     color: #4e616c;
   }
   textarea {
-  width: 100%;
-  max-width: 1800px; /* Set this to your desired maximum width */
-  }
+    width: 100%;
+    max-width: 1800px;
   }
   input[type="text"], input[type="number"], select, button {
     width: 100%;
@@ -50,7 +49,7 @@
   button:hover {
     background-color: #4cae4c;
   }
-  #result1, #result2 {
+  #result1, #result2, #finalResult {
     margin-top: 20px;
     padding: 10px;
     background-color: #e2e2e2;
@@ -63,7 +62,7 @@ function calculateWeight() {
   var difficulty = parseInt(document.getElementById('difficulty1').value);
   var weight = importance * difficulty;
   document.getElementById('weight1').value = weight;
-  document.getElementById('weight2').value = weight; // Use the same weight for Goal 2
+  document.getElementById('weight2').value = weight;
 }
 
 function calculateGAS(section) {
@@ -74,6 +73,22 @@ function calculateGAS(section) {
   var overallGAS = 50 + (numerator / denominator);
 
   document.getElementById('result' + section).innerText = 'Overall GAS Score: ' + overallGAS.toFixed(2);
+  
+  // Update the final result
+  updateFinalResult();
+}
+
+function updateFinalResult() {
+  var result1Text = document.getElementById('result1').innerText;
+  var result2Text = document.getElementById('result2').innerText;
+
+  if(result1Text && result2Text) {
+    var result1 = parseFloat(result1Text.replace('Overall GAS Score: ', ''));
+    var result2 = parseFloat(result2Text.replace('Overall GAS Score: ', ''));
+    var scoreChange = result2 - result1;
+
+    document.getElementById('finalResult').innerText = 'Change in Scores: ' + scoreChange.toFixed(2);
+  }
 }
 
 window.onload = function() {
@@ -85,7 +100,6 @@ window.onload = function() {
 <body>
 <div class="container">
   <h1>Goal Attainment Scale (GAS) Calculator</h1>
-
   <h2>Goal 1: Baseline</h2>
     <div>
       <label for="goal-domain1">What is the goal domain?</label>
@@ -186,13 +200,13 @@ Time-bound: The individual will aim to consistently follow this routine for a pe
   </select>
 </div>
 
-<button onclick="calculateGAS('1')">Calculate Overall GAS Score</button>
-<div id="result1"></div>
+  <button onclick="calculateGAS('1')">Calculate Overall GAS Score</button>
+  <div id="result1"></div>
 
-<hr> <!-- Section break -->
+  <hr> <!-- Section break -->
 
-<div class="container">
-  <h2>Goal 1: Achievement</h2>
+  <div class="container">
+    <h2>Goal 1: Achievement</h2>
 
 <div>
   <label for="weight2">Weight (w):</label>
@@ -227,8 +241,11 @@ Time-bound: The individual will aim to consistently follow this routine for a pe
 </textarea>
 </div>
 
-<button onclick="calculateGAS('2')">Calculate Overall GAS Score</button>
-<div id="result2"></div>
+    <button onclick="calculateGAS('2')">Calculate Overall GAS Score</button>
+    <div id="result2"></div>
+  </div>
+    <!-- New final result section -->
+  <div id="finalResult"></div>
 
 </body>
 </html
