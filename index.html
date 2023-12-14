@@ -69,44 +69,42 @@
   }
 </style>
 <script>
-function calculateWeight() {
-  var importance = parseInt(document.getElementById('importance1').value);
-  var difficulty = parseInt(document.getElementById('difficulty1').value);
+function calculateWeight(goal) {
+  var importance = parseInt(document.getElementById('importance' + goal).value);
+  var difficulty = parseInt(document.getElementById('difficulty' + goal).value);
   var weight = importance * difficulty;
-  document.getElementById('weight1').value = weight;
-  document.getElementById('weight2').value = weight;
+  document.getElementById('weight' + goal).value = weight;
 }
 
-function calculateGAS(section) {
-  var w = parseInt(document.getElementById('weight' + section).value);
-  var x = parseInt(document.getElementById('score' + section).value);
+function calculateGASBaseline(goal) {
+  var w = parseInt(document.getElementById('weight' + goal).value);
+  var x = parseInt(document.getElementById('score' + goal).value); // Baseline score
   var numerator = 10 * (w * x);
   var denominator = Math.sqrt(0.7 * (w * w)) + (0.3 * (w * w));
   var overallGAS = 50 + (numerator / denominator);
 
-  document.getElementById('result' + section).innerText = 'Overall GAS Score: ' + overallGAS.toFixed(2);
-  
-  // Update the final result
-  updateFinalResult();
+  document.getElementById('result' + goal).innerText = 'GAS Baseline Score: ' + overallGAS.toFixed(2);
 }
 
-function updateFinalResult() {
-  var result1Text = document.getElementById('result1').innerText;
-  var result2Text = document.getElementById('result2').innerText;
+function calculateGASAchievement(goal) {
+  var w = parseInt(document.getElementById('weight' + goal).value);
+  var x = parseInt(document.getElementById('score2').value); // Using 'score2' instead of 'achievement' + goal
+  var numerator = 10 * (w * x);
+  var denominator = Math.sqrt(0.7 * (w * w)) + (0.3 * (w * w));
+  var overallGAS = 50 + (numerator / denominator);
 
-  if(result1Text && result2Text) {
-    var result1 = parseFloat(result1Text.replace('Overall GAS Score: ', ''));
-    var result2 = parseFloat(result2Text.replace('Overall GAS Score: ', ''));
-    var scoreChange = result2 - result1;
-
-    document.getElementById('finalResult').innerText = 'Change in Scores: ' + scoreChange.toFixed(2);
-  }
+  document.getElementById('result' + (parseInt(goal) + 5)).innerText = 'Overall GAS Score: ' + overallGAS.toFixed(2);
 }
 
 window.onload = function() {
-  document.getElementById('importance1').onchange = calculateWeight;
-  document.getElementById('difficulty1').onchange = calculateWeight;
+  ['1', '2', '3', '4', '5'].forEach(function(goal) {
+    document.getElementById('importance' + goal).onchange = function() { calculateWeight(goal); };
+    document.getElementById('difficulty' + goal).onchange = function() { calculateWeight(goal); };
+    document.getElementById('score' + goal).onchange = function() { calculateGASBaseline(goal); };
+    document.getElementById('achievement' + goal).onchange = function() { calculateGASAchievement(goal); };
+  });
 };
+
 </script>
 </head>
 <body>
@@ -117,8 +115,8 @@ window.onload = function() {
     
 <div class="row">
   <div>
-    <label for="goal-domain1">What is the goal type?</label>
-    <select id="goal-domain1" name="goal-domain1" required>
+    <label for="goal-type1">What is the goal type?</label>
+    <select id="goal-type1" name="goal-type1" required>
       <option value="Social Connection">Social Connection</option>
       <option value="Skills for Independent Living">Skills for Independent Living</option>
       <option value="Physical or Mental Health">Physical or Mental Health</option>
@@ -134,8 +132,8 @@ window.onload = function() {
 
     
 <div>
-  <label for="achieve">What is the SMART Goal to be achieved?</label>
-  <textarea id="achieve" name="achieve" required rows="30">
+  <label for="SMARTGoal1">What is the SMART Goal to be achieved?</label>
+  <textarea id="SMARTGoal1" name="SMARTGoal1" required rows="30">
 
 Specific
 What do you want to accomplish?
@@ -177,11 +175,12 @@ Achievable: The goal is realistic and achievable, considering that it involves a
 Relevant: This goal is relevant to the individual’s overall self-care and oral hygiene, which is an important part of personal health.
 Time-bound: The individual will aim to consistently follow this routine for a period of three months, after which they will reassess their habits and make any necessary adjustments.
 
-+2 (Much greater than expected outcome): The individual maintains twice-daily tooth brushing, has significantly improved oral health (as evidenced by a dental check-up), and consistently uses additional oral hygiene methods.
-+1 (Greater than expected outcome): The individual not only brushes their teeth twice daily but also adopts additional oral hygiene practices, such as flossing daily or using mouthwash.
-0 (Expected outcome ie goal achieved): The individual consistently brushes their teeth twice daily, as per the goal.
--1 (Less than expected outcome): The individual brushes their teeth occasionally, but far less than twice daily, showing minimal improvement.
--2 (Much less than expected outcome): The individual rarely or never brushes their teeth, showing no improvement from the baseline.
++2: Much greater than the expected outcome): The individual maintains twice-daily tooth brushing, has significantly improved oral health (as evidenced by a dental check-up), and consistently uses additional oral hygiene methods.
++1: Greater than the expected outcome): The individual not only brushes their teeth twice daily but also adopts additional oral hygiene practices, such as flossing daily or using mouthwash.
+0: Expected outcome (i.e. goal achieved): The individual consistently brushes their teeth twice daily, as per the goal.
+-1: Less than the expected outcome: The individual brushes their teeth occasionally, but far less than twice daily, showing minimal improvement.
+-2: Much less than the expected outcome: The individual rarely or never brushes their teeth, showing no improvement from the baseline.
+
     
 </textarea>
 </div>
@@ -189,17 +188,17 @@ Time-bound: The individual will aim to consistently follow this routine for a pe
 
 <div class="row">
   <div>
-    <label for="Maintenance or improvement">Is this an improvement or maintenance goal?:</label>
-    <select id="Maintenance or improvement" name="Maintenance or improvement" required>
+    <label for="Maintenance-or-improvement">Is this an improvement or maintenance goal?:</label>
+    <select id="Maintenance-or-improvement" name="Maintenance-or-improvement" required>
       <option value="Maintenance">Improvement Goal</option>
       <option value="Improvement">Maintenance Goal</option>
     </select>
   </div>
 
   <div>
-    <label for="importance1">How important is achieving this goal?</label>
+    <label for="importance1">How important is achieving this goal to the client?</label>
     <select id="importance1" name="importance1" required>
-      <option value="1">Important</option>
+      <option value="1">Slightly Important</option>
       <option value="2">Very Important</option>
       <option value="3">Extremely Important</option>
     </select>
@@ -217,7 +216,7 @@ Time-bound: The individual will aim to consistently follow this routine for a pe
   </div>
 
   <div>
-    <label for="score1">What is the current capability to meet the goal?</label>
+    <label for="score1">What is the client's current capability / function to achieve this goal?</label>
     <select id="score1" name="score1" required>
       <option value="-1">Some capability / function</option>
       <option value="-2">No capability / function</option>
@@ -225,11 +224,11 @@ Time-bound: The individual will aim to consistently follow this routine for a pe
   </div>
 </div>  
 
-<button onclick="calculateGAS('1')">Calculate Overall GAS Score</button>
-<div id="result1"></div>
+  <button onclick="calculateGASBaseline('1')">Calculate GAS Baseline Score for Goal 1</button>
+  <div id="result1"></div>
+</div> 
+</div> 
 
-
-<hr> <!-- Section break -->
 
 </div>
 </div> 
@@ -241,23 +240,23 @@ Time-bound: The individual will aim to consistently follow this routine for a pe
 <div>
   <label for="score2">Achievement Level:</label>
   <select id="score2" name="score2" required>
-    <option value="2">Much greater than expected outcome</option>
-    <option value="1">Greater than expected outcome</option>
+    <option value="2">Much greater than the expected outcome</option>
+    <option value="1">Greater than the expected outcome</option>
     <option value="0">Expected outcome (i.e. goal achieved)</option>
-    <option value="-1">Less than expected outcome</option>
-    <option value="-2">Much less than expected outcome</option>
+    <option value="-1">Less than the expected outcome</option>
+    <option value="-2">Much less than the expected outcome</option>
   </select>
 </div>
 
 <div>
-  <label for="achievement">What was your progress?</label>
-  <textarea id="achievement" name="achievement" required rows="10">
+  <label for="achievement1">What was your progress?</label>
+  <textarea id="achievement1" name="achievement1" required rows="10">
 
-+2 (Much greater than expected outcome): The individual maintains twice-daily tooth brushing, has significantly improved oral health (as evidenced by a dental check-up), and consistently uses additional oral hygiene methods.
-+1 (Greater than expected outcome): The individual not only brushes their teeth twice daily but also adopts additional oral hygiene practices, such as flossing daily or using mouthwash.
-0 (Expected outcome i.e. goal achieved): The individual consistently brushes their teeth twice daily, as per the goal.
--1 (Less than expected outcome): The individual brushes their teeth occasionally, but far less than twice daily, showing minimal improvement.
--2 (Much less than expected outcome): The individual rarely or never brushes their teeth, showing no improvement from the baseline.
++2: Much greater than the expected outcome): The individual maintains twice-daily tooth brushing, has significantly improved oral health (as evidenced by a dental check-up), and consistently uses additional oral hygiene methods.
++1: Greater than the expected outcome): The individual not only brushes their teeth twice daily but also adopts additional oral hygiene practices, such as flossing daily or using mouthwash.
+0: Expected outcome (i.e. goal achieved): The individual consistently brushes their teeth twice daily, as per the goal.
+-1: Less than the expected outcome: The individual brushes their teeth occasionally, but far less than twice daily, showing minimal improvement.
+-2: Much less than the expected outcome: The individual rarely or never brushes their teeth, showing no improvement from the baseline.
 
     Notes: 
 
@@ -265,11 +264,14 @@ Time-bound: The individual will aim to consistently follow this routine for a pe
 </textarea>
 </div>
 
-    <button onclick="calculateGAS('2')">Calculate Overall GAS Score</button>
-    <div id="result2"></div>
+    <button onclick="calculateGASAchievement('1')">Calculate Overall GAS Score for Goal 1</button>
+    <div id="result6"></div>
   </div>
     <!-- New final result section -->
   <div id="finalResult"></div>
+<div>
+
+<hr> <!-- Section break -->
 
 </body>
 </html
